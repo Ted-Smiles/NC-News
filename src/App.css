@@ -74,6 +74,33 @@
   justify-content: space-between;
 }
 
+.commments-container {
+  margin-top: 30px;
+  border-top: 1px solid black;
+}
+
+.comment-container {
+  flex-direction: column;
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.comment-author {
+  display: flex;
+  justify-content: space-around;
+}
+
+.comment-container h4{
+  align-items: flex-start;
+}
+
+.votes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 1450px) {
   .article-container {
     grid-template-columns: auto auto

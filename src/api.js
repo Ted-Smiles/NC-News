@@ -14,6 +14,12 @@ export const getArticleById = (id) => {
     })
 }
 
+export const getAllCommentFromId = (id) => {
+    return axios.get(baseUrl+'articles/'+id+'/comments').then(({data}) => {
+        return data
+    })
+}
+
 export const convertTime = (time) => {
     return(time.split('T')[0])
 }
