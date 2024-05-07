@@ -1,8 +1,9 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  width: 100%;
+  background-color: #f6f2e7;
+  color: #557c70;
+  min-height: 100vh;
 }
 
 /* Header */
@@ -23,16 +24,16 @@
 
 /* Articles */
 .article-container {
-  min-height: 70vh;
   display: grid;
   grid-template-columns: auto auto auto;
   width: 90%;
-  margin: 0 auto;
+  margin: 50px auto;
   gap: 30px;
 }
 
 .article {
   flex-direction: column;
+  height: 100%;
   display: flex;
   align-items: center;
   border: 2px solid black;
@@ -47,6 +48,30 @@
   margin: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.single-article-container {
+  width: 60%;
+  margin: 0 auto;
+  border: 2px solid black;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.single-article-container img {
+  width: 80%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.info {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
 }
 
 @media (max-width: 1450px) {
