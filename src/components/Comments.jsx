@@ -3,7 +3,13 @@ import { getAllCommentFromId } from "../api";
 import CommentCard from "./CommentCard";
 import AddNewComment from "./AddNewComment";
 
+import { useContext } from "react"
+import { UserContext } from "../context/User"
+
+
+
 const Comments = ({article_id}) => {
+    const { user } = useContext(UserContext);
 
     const [comments, setComments] = useState([])
     const [commentsAreLoading, setCommentsAreLoading] = useState(true);
@@ -42,7 +48,7 @@ const Comments = ({article_id}) => {
     }, [addingComment]);
 
     const createNewComment = () => {
-        setAddingComment(true)
+        user !== '' ? setAddingComment(true) : setErr("Must be login to comment")
     }
     
     const handleClick = (e) => {
