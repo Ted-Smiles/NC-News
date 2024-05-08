@@ -44,6 +44,10 @@ export const postNewComment = (id, comment) => {
     return Client.post('articles/'+id+'/comments', {author, body})
 }
 
+export const deleteComment = (id) => {
+    return Client.delete('comments/'+id)
+}
+
 export const convertTime = (time) => {
     return(time.split('T')[0])
 }

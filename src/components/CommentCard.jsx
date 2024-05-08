@@ -1,8 +1,12 @@
-import { changeCommentVote, convertTime } from "../api"
+import { changeCommentVote, convertTime, deleteComment } from "../api"
 
-const CommentCard = ({comments, setComments, comment, index, voted, setVoted, setErr}) => {
+import { useContext } from "react"
+import { UserContext } from "../context/User"
 
-    const handleClick = (e, id) => {
+const CommentCard = ({singleArticle, comments, setComments, comment, index, voted, setVoted, setErr, setDeleted, setPage}) => {
+    const { user } = useContext(UserContext);
+
+    const handleVote = (e, id) => {
         const index = comments.findIndex(comment => comment.comment_id === id);
 
         if (voted[index] === e.target.innerText) {
@@ -51,6 +55,14 @@ const CommentCard = ({comments, setComments, comment, index, voted, setVoted, se
         }
     }
 
+    const handleDelete = (id) => {
+        setPage(1)
+        deleteComment(id).catch(() => {
+            setErr('Error deleting comment')
+        })
+        setDeleted(true)
+    }
+
     return (
         <>
             <div className='comment-author'>
@@ -59,10 +71,13 @@ const CommentCard = ({comments, setComments, comment, index, voted, setVoted, se
             </div>
             <p>{comment.body}</p>
             <div className='votes'> 
-                <button className={voted[index] === '-' ? 'active' : ''} onClick={(e) => handleClick(e, comment.comment_id)}>-</button>
+                <button className={voted[index] === '-' ? 'active' : ''} onClick={(e) => handleVote(e, comment.comment_id)}>-</button>
                     <p>{comment.votes}</p>
-                <button className={voted[index] === '+' ? 'active' : ''} onClick={(e) => handleClick(e, comment.comment_id)}>+</button>
+                <button className={voted[index] === '+' ? 'active' : ''} onClick={(e) => handleVote(e, comment.comment_id)}>+</button>
             </div>
+            { comment.author === user || singleArticle.author === user ?
+                <button onClick={() => (handleDelete(comment.comment_id))}>Delete</button> 
+            : null }
         </>
     )
 }
