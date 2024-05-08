@@ -9,7 +9,7 @@ const SingleArticle = () => {
     const [singleArticle, setSingleArticle] = useState({})
     let [vote, setVote] = useState(0)
     const [voted, setVoted] = useState('')
-    const [err, setErr] = useState(false)
+    const [err, setErr] = useState('')
 
 
     let { article_id } = useParams();
@@ -33,7 +33,7 @@ const SingleArticle = () => {
                 changeArticleVote(article_id, e.target.innerText === '+' ? '-' : '+')
                 setVote((currentVote) => e.target.innerText === '+' ? currentVote - 1 : currentVote + 1)
                 setVoted('')
-                setErr(true)
+                setErr('There was an error with your vote')
             })
             if (e.target.innerText === '+') {
                 setVote((currentVote) => currentVote + 1)
@@ -51,7 +51,7 @@ const SingleArticle = () => {
 
     return (
         <div className='single-article-container'>
-            {err ? <p className="error">There was am error with your vote</p> : null}
+            <p>{err}</p>
             <h2>{singleArticle.title}</h2>
             <img src={singleArticle.article_img_url}></img>
             <div className='info'>
@@ -66,7 +66,7 @@ const SingleArticle = () => {
                 </div>
                 <p>{singleArticle.body}</p>
 
-                <Comments article_id={article_id} setErr={setErr}/>
+                <Comments singleArticle={singleArticle} article_id={article_id}/>
 
             </div>
         </div>

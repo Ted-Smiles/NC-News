@@ -8,13 +8,14 @@ import { UserContext } from "../context/User"
 
 
 
-const Comments = ({article_id}) => {
+const Comments = ({singleArticle, article_id}) => {
     const { user } = useContext(UserContext);
 
     const [comments, setComments] = useState([])
     const [commentsAreLoading, setCommentsAreLoading] = useState(true);
     const [voted, setVoted] = useState([])
     const [addingComment, setAddingComment] = useState(false)
+    const [deleted, setDeleted] = useState(false)
 
     const [totalComments, setTotalComments] = useState(0)
     const [page, setPage] = useState(1)
@@ -29,19 +30,16 @@ const Comments = ({article_id}) => {
             setComments(comments)
             setCommentsAreLoading(false)
             setVoted(comments.map(comment => ('')));
+            setDeleted(false)
         })
-    }, [addingComment, page])
+    }, [addingComment, page, deleted])
 
     useEffect(() => {
         if (addingComment) {
-            // Apply the overflow: hidden; style to the body when addingComment is true
             document.body.style.overflow = 'hidden';
         } else {
-            // Remove the overflow: hidden; style when addingComment is false
             document.body.style.overflow = '';
         }
-    
-        // Cleanup function to remove the style when the component unmounts or when addingComment changes
         return () => {
             document.body.style.overflow = '';
         };
@@ -63,21 +61,22 @@ const Comments = ({article_id}) => {
             ) : (
                 <>
                     <p><span>{err}</span></p>
+                    {deleted ? <p>Successfully deleted</p> : null}
                     {addingComment ? 
                     <div className="new-comment-container">
-                        <AddNewComment article_id={article_id} setAddingComment={setAddingComment} setErr={setErr}/>
+                        <AddNewComment article_id={article_id} setAddingComment={setAddingComment} setErr={setErr} setPage={setPage}/>
                     </div>
                     : null }
                     <button onClick={createNewComment}>New comment</button>
                     {comments.map((comment, index) => (
                         <div className='comment-container' key={index}>
-                            <CommentCard comments={comments} setComments={setComments} comment={comment} index={index} voted={voted} setVoted={setVoted} setErr={setErr}/>
+                            <CommentCard singleArticle={singleArticle} comments={comments} setComments={setComments} comment={comment} index={index} voted={voted} setVoted={setVoted} setErr={setErr} setDeleted={setDeleted} setPage={setPage}/>
                         </div>
                     ))}
                     <div className='pages'> 
                         <button disabled={page === 1} onClick={handleClick}>Previous Page</button>
                             <p>{page}</p>
-                        <button disabled={(page * 10) > totalComments} onClick={handleClick}>Next Page</button>
+                        <button disabled={(page * 10) >= totalComments} onClick={handleClick}>Next Page</button>
                     </div>
                 </> 
             )}

@@ -3,7 +3,7 @@ import { getAllUSers, postNewComment } from "../api";
 import { useContext } from "react"
 import { UserContext } from "../context/User"
 
-const AddNewComment = ({article_id, setAddingComment, setErr}) => {
+const AddNewComment = ({article_id, setAddingComment, setErr, setPage}) => {
     const { user } = useContext(UserContext);
     const [commentToAdd, setCommentToAdd] = useState({author: user});
   
@@ -14,6 +14,7 @@ const AddNewComment = ({article_id, setAddingComment, setErr}) => {
         setErr('Comment failed to post')
       })
       setAddingComment(false)
+      setPage(1)
     };
 
     const handleClose = () => {
