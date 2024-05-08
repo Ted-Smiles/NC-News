@@ -22,7 +22,6 @@ const SingleArticle = () => {
             setVote(article.votes)
         });
     }, [])
-    console.log(voted)
 
     const handleClick = (e) => {
         if (voted === e.target.innerText) {
@@ -61,9 +60,9 @@ const SingleArticle = () => {
                     <p>{convertTime(singleArticle.created_at)}</p>
                 </div>
                 <div className='votes'> 
-                    <button className={voted === '+' ? 'active' : ''} onClick={handleClick}>+</button>
-                    <p>{vote}</p>
                     <button className={voted === '-' ? 'active' : ''} onClick={handleClick}>-</button>
+                        <p>{vote}</p>
+                    <button className={voted === '+' ? 'active' : ''} onClick={handleClick}>+</button>
                 </div>
                 <p>{singleArticle.body}</p>
 
