@@ -8,6 +8,7 @@ import Login from './components/Login'
 
 
 function App() {
+  
 
   return (
     <>
@@ -15,8 +16,9 @@ function App() {
       <Routes>
 
         <Route path='/' element={<Articles />} />
+        <Route path='/articles/:topic' element={<Articles />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/articles/:article_id' element={<SingleArticle />} />
+        <Route path='/article/:article_id' element={<SingleArticle />} />
 
       </Routes>
       

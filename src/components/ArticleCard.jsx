@@ -7,7 +7,7 @@ const ArticleCard = ({articles}) => {
         <>
             {articles
             .map((article) => (
-                <Link to={`/articles/${article.article_id}`} key={article.article_id} article={article}>
+                <Link to={`/article/${article.article_id}`} key={article.article_id} article={article}>
                     <div className="article" >
                         <img src={article.article_img_url}></img>
                         <h4>{article.title}</h4>
