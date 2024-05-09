@@ -11,8 +11,14 @@ export const getAllUSers = () => {
     })
 }
 
-export const getAllArticles = () => {
-    return Client.get('articles').then(({data}) => {
+export const getAllArticles = (topic = '') => {
+    return Client.get('articles?topic='+topic).then(({data}) => {
+        return data
+    })
+}
+
+export const getAllTopics = () => {
+    return Client.get('topics').then(({data}) => {
         return data
     })
 }

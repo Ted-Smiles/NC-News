@@ -3,17 +3,24 @@ import { useContext } from "react"
 import { UserContext } from "../context/User"
 
 
-const Header = () => {
+const Header = ({setSelectedTopic}) => {
     const { user, setUser } = useContext(UserContext);
 
     const handleLogout = () => {
-        setUser(''); // Update the user state when logging out
+        setUser('');
     };
+
+    const handleClick = () => {
+        setSelectedTopic('')
+    }
     
     return (
         <div className="header">
             <div className="title">
-                <h1>Nc News</h1>
+                <Link to={`/`} onClick={handleClick}>
+                    <h1>Nc News</h1>
+                </Link>
+                
                 {user !== '' ? (
                     <div className="votes">
                         <p>{user}</p>
