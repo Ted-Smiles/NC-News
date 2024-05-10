@@ -13,14 +13,30 @@ const Comments = ({singleArticle, article_id}) => {
 
     const [comments, setComments] = useState([])
     const [commentsAreLoading, setCommentsAreLoading] = useState(true);
+    const [commentsFailedToLoad, setCommentsFailedToLoad] = useState(false);
     const [voted, setVoted] = useState([])
     const [addingComment, setAddingComment] = useState(false)
-    const [deleted, setDeleted] = useState(false)
 
     const [totalComments, setTotalComments] = useState(0)
     const [page, setPage] = useState(1)
 
     const [err, setErr] = useState('')
+    const [fade, setFade] = useState(false)
+
+    useEffect(() => {
+        setFade(true)
+        const fadeTimeOut = setTimeout(() => {
+            setFade(false)
+          }, 4000);
+        if (err && err !== '') {
+          const timeout = setTimeout(() => {
+            setErr('');
+          }, 6000); 
+          return () => clearTimeout(timeout);
+        }
+        return () => clearTimeout(fadeTimeOut);
+    }, [err]);
+      
     
 
     useEffect(() => {
@@ -30,9 +46,10 @@ const Comments = ({singleArticle, article_id}) => {
             setComments(comments)
             setCommentsAreLoading(false)
             setVoted(comments.map(comment => ('')));
-            setDeleted(false)
+        }).catch(()=> {
+            setCommentsFailedToLoad(true)
         })
-    }, [addingComment, page, deleted])
+    }, [page])
 
     useEffect(() => {
         if (addingComment) {
@@ -53,6 +70,14 @@ const Comments = ({singleArticle, article_id}) => {
         e.target.innerText === 'Next Page' ? setPage((currentPage) => currentPage + 1) : setPage((currentPage) => currentPage - 1)
     }
 
+    if (commentsFailedToLoad) {
+        return (
+            <h3>
+                Comments failed to load. Try again later
+            </h3>
+        )
+    }
+
     return (
         <div className='commments-container'>
             <h3>Comments</h3>
@@ -60,23 +85,22 @@ const Comments = ({singleArticle, article_id}) => {
                 <p>Loading</p> 
             ) : (
                 <>
-                    <p><span>{err}</span></p>
-                    {deleted ? <p>Successfully deleted</p> : null}
+                    <p><span className={!fade ? 'fade-out' : ''}>{err}</span></p>
                     {addingComment ? 
                     <div className="new-comment-container">
-                        <AddNewComment article_id={article_id} setAddingComment={setAddingComment} setErr={setErr} setPage={setPage}/>
+                        <AddNewComment article_id={article_id} setAddingComment={setAddingComment} err={err} setErr={setErr} setPage={setPage} setComments={setComments}/>
                     </div>
                     : null }
-                    <button onClick={createNewComment}>New comment</button>
+                    <button disabled={err !== ''} onClick={createNewComment}>New comment</button>
                     {comments.map((comment, index) => (
                         <div className='comment-container' key={index}>
-                            <CommentCard singleArticle={singleArticle} comments={comments} setComments={setComments} comment={comment} index={index} voted={voted} setVoted={setVoted} setErr={setErr} setDeleted={setDeleted} setPage={setPage}/>
+                            <CommentCard singleArticle={singleArticle} comments={comments} setComments={setComments} comment={comment} index={index} voted={voted} setVoted={setVoted} err={err} setErr={setErr} setPage={setPage}/>
                         </div>
                     ))}
                     <div className='pages'> 
-                        <button disabled={page === 1} onClick={handleClick}>Previous Page</button>
+                        <button disabled={page === 1 || err !== ''} onClick={handleClick}>Previous Page</button>
                             <p>{page}</p>
-                        <button disabled={(page * 10) >= totalComments} onClick={handleClick}>Next Page</button>
+                        <button disabled={(page * 10) >= totalComments || err !== ''} onClick={handleClick}>Next Page</button>
                     </div>
                 </> 
             )}

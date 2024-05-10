@@ -8,6 +8,10 @@ const Login = () => {
   const { user, setUser } = useContext(UserContext);
   const [users, setUsers] = useState([]);
 
+  const goBack = () => {
+    window.history.back();
+  };
+
   useEffect(() => {
     getAllUSers().then(({ users }) => {
       setUsers(users);
@@ -21,7 +25,7 @@ const Login = () => {
       <form
         className="comment-form"
         onSubmit={(e) => {
-          handleSubmit(e);
+            handleSubmit(e);
         }}
       >
         <div>
@@ -45,7 +49,7 @@ const Login = () => {
             })}
           </select>
         </div>
-        <Link to={`/`}>
+        <Link to="#" onClick={goBack}>
           <button>Submit</button>
         </Link>
       </form>

@@ -1,10 +1,12 @@
 import { changeCommentVote, convertTime, deleteComment } from "../api"
 
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { UserContext } from "../context/User"
 
-const CommentCard = ({singleArticle, comments, setComments, comment, index, voted, setVoted, setErr, setDeleted, setPage}) => {
+const CommentCard = ({singleArticle, comments, setComments, comment, index, voted, setVoted, err, setErr, setPage}) => {
     const { user } = useContext(UserContext);
+    const [deleted, setDeleted] = useState(false)
+    const [confirm, setConfirm] = useState(false)
 
     const handleVote = (e, id) => {
         const index = comments.findIndex(comment => comment.comment_id === id);
@@ -56,11 +58,26 @@ const CommentCard = ({singleArticle, comments, setComments, comment, index, vote
     }
 
     const handleDelete = (id) => {
-        setPage(1)
-        deleteComment(id).catch(() => {
-            setErr('Error deleting comment')
-        })
-        setDeleted(true)
+        if (!confirm) {
+            setConfirm(true)
+        } else {
+            setPage(1)
+            deleteComment(id).then(()=>{
+                setDeleted(true)
+                setConfirm(false)
+            }).catch(() => {
+                setConfirm(false)
+                setDeleted(false)
+                setErr('Error deleting comment')
+            })
+
+        }
+    }
+
+    if (deleted) {
+        return ( 
+            <h4>Successfully deleted comment</h4>
+        )
     }
 
     return (
@@ -71,13 +88,14 @@ const CommentCard = ({singleArticle, comments, setComments, comment, index, vote
             </div>
             <p>{comment.body}</p>
             <div className='votes'> 
-                <button className={voted[index] === '-' ? 'active' : ''} onClick={(e) => handleVote(e, comment.comment_id)}>-</button>
+                <button disabled={err !== ''} className={voted[index] === '-' ? 'active' : ''} onClick={(e) => handleVote(e, comment.comment_id)}>-</button>
                     <p>{comment.votes}</p>
-                <button className={voted[index] === '+' ? 'active' : ''} onClick={(e) => handleVote(e, comment.comment_id)}>+</button>
+                <button disabled={err !== ''} className={voted[index] === '+' ? 'active' : ''} onClick={(e) => handleVote(e, comment.comment_id)}>+</button>
             </div>
-            { comment.author === user || singleArticle.author === user ?
-                <button onClick={() => (handleDelete(comment.comment_id))}>Delete</button> 
-            : null }
+            { (comment.author === user || singleArticle.author === user) ?
+                <button disabled={err !== ''} onClick={()=> {handleDelete(comment.comment_id)}}>{!confirm ? 'Delete' : 'Are you sure?'}</button>
+             : null }
+
         </>
     )
 }

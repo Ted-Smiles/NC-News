@@ -4,12 +4,13 @@ import { UserContext } from "../context/User"
 
 
 const Header = ({setSelectedTopic}) => {
-    const { user, setUser } = useContext(UserContext);
 
+    const { user, setUser } = useContext(UserContext);
+    
     const handleLogout = () => {
         setUser('');
     };
-
+    
     const handleClick = () => {
         setSelectedTopic('')
     }

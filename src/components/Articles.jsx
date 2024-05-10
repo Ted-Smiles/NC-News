@@ -34,13 +34,16 @@ const Articles = ({}) => {
         <>
             <h2>Articles</h2>
             {topics
-            .map((topic) => (
-                <Link to={selectedTopic === topic.slug ? '/' : `/articles/${topic.slug}`}>
+            .map((topic, index) => (
+                <Link key={index} to={selectedTopic === topic.slug ? '/' : `/articles/${topic.slug}`}>
                     <button className={selectedTopic === topic.slug ? 'active' : ''} onClick={() => handleClick(topic.slug)}>{topic.slug}</button>
                 </Link> 
             ))}
             <div className="article-container">
-                <ArticleCard articles={articles}/>
+                {articles
+                .map((article) => (
+                    <ArticleCard key={article.article_id} article={article}/>
+                ))}
             </div>
         </>
     )
