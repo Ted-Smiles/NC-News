@@ -11,8 +11,18 @@ export const getAllUSers = () => {
     })
 }
 
-export const getAllArticles = (topic = '') => {
-    return Client.get('articles?topic='+topic).then(({data}) => {
+export const getAllArticles = (topic, sort, order) => {
+    let url = 'articles'
+    if (topic !== '') {
+        url = url + '?topic='+topic
+    }
+    if (sort !== '' && topic !== '') {
+        url = url + '?topic='+topic+'&&sort_by='+sort+'&&order='+order
+    }
+    else if (sort !== '' && topic == ''){
+        url = url + '?sort_by='+sort+'&&order='+order
+    }
+    return Client.get(url).then(({data}) => {
         return data
     })
 }

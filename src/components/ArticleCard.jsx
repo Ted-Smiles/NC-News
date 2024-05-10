@@ -12,6 +12,7 @@ const ArticleCard = ({ article }) => {
             <h4>{article.title}</h4>
             <p>Created by {article.author}</p>
             <p>{article.comment_count} comments</p>
+            <p>{article.votes} votes</p>
             <p>{convertTime(article.created_at)}</p>
         </div>
     </Link>
