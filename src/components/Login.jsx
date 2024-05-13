@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
-import { Link } from "react-router-dom"
 import { UserContext } from "../context/User";
 import { getAllUSers } from "../api";
 
-const Login = ({ prevUrl }) => {
+const Login = () => {
   const { setUser } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
@@ -18,14 +17,13 @@ const Login = ({ prevUrl }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setUser(selectedUser);
-    window.history.back()
+    window.history.back();
   };
 
   const handleUserChange = (e) => {
     const selectedValue = e.target.value;
     setSelectedUser(selectedValue);
   };
-  
 
   return (
     <>
@@ -34,7 +32,7 @@ const Login = ({ prevUrl }) => {
       <form
         className="comment-form"
         onSubmit={(e) => {
-            handleSubmit(e);
+          handleSubmit(e);
         }}
       >
         <div>
@@ -42,10 +40,9 @@ const Login = ({ prevUrl }) => {
           <select
             name="user"
             id="user"
-            defaultValue={""}
             value={selectedUser}
             onChange={(e) => {
-                handleUserChange(e);
+              handleUserChange(e);
             }}
           >
             <option key={"blank"} value={""}></option>
@@ -58,7 +55,7 @@ const Login = ({ prevUrl }) => {
             })}
           </select>
         </div>
-    
+
         <button type="submit">Submit</button>
       </form>
     </>
