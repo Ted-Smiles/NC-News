@@ -9,6 +9,7 @@ import Homepage from './components/Homepage'
 import { useContext } from "react";
 
 import { UserContext } from "./context/User";
+import ErrorPage from './components/ErrorPage'
 
 
 
@@ -26,6 +27,8 @@ function App() {
         <Route path='/:topic' element={<Homepage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/article/:article_id' element={<SingleArticle />} />
+
+        <Route path="*" element={<ErrorPage />} />
 
       </Routes>
       

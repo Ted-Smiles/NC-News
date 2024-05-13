@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { UserContext } from "../context/User";
 import ArticleCard from "./ArticleCard";
 import { getAllArticles, getAllTopics } from "../api";
+import ErrorPage from "./ErrorPage";
 
 const Homepage = () => {
   const { user, setUser } = useContext(UserContext);
@@ -12,6 +13,7 @@ const Homepage = () => {
   const topic = location.pathname.slice(1);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false)
   const [articles, setArticles] = useState([]);
   const [topics, setTopics] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState(topic);
@@ -25,14 +27,19 @@ const Homepage = () => {
     setIsLoading(true);
     getAllTopics().then(({ topics }) => {
       setTopics(topics);
-    });
+    })
     getAllArticles(selectedTopic, sort, order, articlePage).then(
       ({ articles, total_count }) => {
         setTotalArticles(total_count);
         setArticles(articles);
         setIsLoading(false);
       }
-    );
+    )
+    .catch((err)=>{
+        console.log('err')
+        setIsLoading(false);
+        setError(true)
+    })
   }, [selectedTopic, search, articlePage]);
 
   if (isLoading) {
@@ -69,6 +76,12 @@ const Homepage = () => {
   };
 
   const handleGuestClick = () => [setUser("Guest")];
+
+  if (error) {
+    return (
+        <ErrorPage />
+    )
+  }
 
   if (user === "") {
     return (
