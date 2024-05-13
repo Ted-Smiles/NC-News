@@ -18,7 +18,7 @@ const Comments = ({singleArticle, article_id}) => {
     const [addingComment, setAddingComment] = useState(false)
 
     const [totalComments, setTotalComments] = useState(0)
-    const [page, setPage] = useState(1)
+    const [commentPage, setCommentPage] = useState(1)
 
     const [err, setErr] = useState('')
     const [fade, setFade] = useState(false)
@@ -41,7 +41,7 @@ const Comments = ({singleArticle, article_id}) => {
 
     useEffect(() => {
         setCommentsAreLoading(true)
-        getAllCommentFromId(article_id, page).then(({comments, total_count}) => {
+        getAllCommentFromId(article_id, commentPage).then(({comments, total_count}) => {
             setTotalComments(total_count)
             setComments(comments)
             setCommentsAreLoading(false)
@@ -49,7 +49,7 @@ const Comments = ({singleArticle, article_id}) => {
         }).catch(()=> {
             setCommentsFailedToLoad(true)
         })
-    }, [page])
+    }, [commentPage])
 
     useEffect(() => {
         if (addingComment) {
@@ -67,7 +67,7 @@ const Comments = ({singleArticle, article_id}) => {
     }
     
     const handleClick = (e) => {
-        e.target.innerText === 'Next Page' ? setPage((currentPage) => currentPage + 1) : setPage((currentPage) => currentPage - 1)
+        e.target.innerText === 'Next Page' ? setCommentPage((currentPage) => currentPage + 1) : setCommentPage((currentPage) => currentPage - 1)
     }
 
     if (commentsFailedToLoad) {
@@ -88,19 +88,19 @@ const Comments = ({singleArticle, article_id}) => {
                     <p><span className={!fade ? 'fade-out' : ''}>{err}</span></p>
                     {addingComment ? 
                     <div className="new-comment-container">
-                        <AddNewComment article_id={article_id} setAddingComment={setAddingComment} err={err} setErr={setErr} setPage={setPage} setComments={setComments}/>
+                        <AddNewComment article_id={article_id} setAddingComment={setAddingComment} err={err} setErr={setErr} setCommentPage={setCommentPage} setComments={setComments}/>
                     </div>
                     : null }
                     <button disabled={err !== ''} onClick={createNewComment}>New comment</button>
                     {comments.map((comment, index) => (
                         <div className='comment-container' key={index}>
-                            <CommentCard singleArticle={singleArticle} comments={comments} setComments={setComments} comment={comment} index={index} voted={voted} setVoted={setVoted} err={err} setErr={setErr} setPage={setPage}/>
+                            <CommentCard singleArticle={singleArticle} comments={comments} setComments={setComments} comment={comment} index={index} voted={voted} setVoted={setVoted} err={err} setErr={setErr} setCommentPage={setCommentPage}/>
                         </div>
                     ))}
                     <div className='pages'> 
-                        <button disabled={page === 1 || err !== ''} onClick={handleClick}>Previous Page</button>
-                            <p>{page}</p>
-                        <button disabled={(page * 10) >= totalComments || err !== ''} onClick={handleClick}>Next Page</button>
+                        <button disabled={commentPage === 1 || err !== ''} onClick={handleClick}>Previous Page</button>
+                            <p>{commentPage}</p>
+                        <button disabled={(commentPage * 10) >= totalComments || err !== ''} onClick={handleClick}>Next Page</button>
                     </div>
                 </> 
             )}

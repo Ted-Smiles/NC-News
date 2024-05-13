@@ -11,18 +11,21 @@ export const getAllUSers = () => {
     })
 }
 
-export const getAllArticles = (topic, sort, order) => {
-    let url = 'articles'
+export const getAllArticles = (topic, sort, order, page) => {
+    const params = {
+        order,
+        p: page
+    }
+
     if (topic !== '') {
-        url = url + '?topic='+topic
+        params.topic = topic
     }
-    if (sort !== '' && topic !== '') {
-        url = url + '?topic='+topic+'&&sort_by='+sort+'&&order='+order
+    if (sort !== '') {
+        params.sort_by = sort
     }
-    else if (sort !== '' && topic == ''){
-        url = url + '?sort_by='+sort+'&&order='+order
-    }
-    return Client.get(url).then(({data}) => {
+
+    return Client.get('articles', { params
+      }).then(({data}) => {
         return data
     })
 }

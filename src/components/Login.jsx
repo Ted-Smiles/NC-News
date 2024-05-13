@@ -4,19 +4,28 @@ import { Link } from "react-router-dom"
 import { UserContext } from "../context/User";
 import { getAllUSers } from "../api";
 
-const Login = () => {
-  const { user, setUser } = useContext(UserContext);
+const Login = ({ prevUrl }) => {
+  const { setUser } = useContext(UserContext);
   const [users, setUsers] = useState([]);
-
-  const goBack = () => {
-    window.history.back();
-  };
+  const [selectedUser, setSelectedUser] = useState("");
 
   useEffect(() => {
     getAllUSers().then(({ users }) => {
       setUsers(users);
     });
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setUser(selectedUser);
+    window.history.back()
+  };
+
+  const handleUserChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedUser(selectedValue);
+  };
+  
 
   return (
     <>
@@ -34,9 +43,9 @@ const Login = () => {
             name="user"
             id="user"
             defaultValue={""}
-            value={user}
+            value={selectedUser}
             onChange={(e) => {
-              setUser(e.target.value);
+                handleUserChange(e);
             }}
           >
             <option key={"blank"} value={""}></option>
@@ -49,9 +58,8 @@ const Login = () => {
             })}
           </select>
         </div>
-        <Link to="#" onClick={goBack}>
-          <button>Submit</button>
-        </Link>
+    
+        <button type="submit">Submit</button>
       </form>
     </>
   );

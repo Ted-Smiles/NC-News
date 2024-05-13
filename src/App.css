@@ -6,6 +6,14 @@
   min-height: 100vh;
 }
 
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  height: 80vh
+}
+
 /* Header */
 .header {
   position: relative;
@@ -116,6 +124,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin-bottom: 50px;
 }
 
 .pages button {
